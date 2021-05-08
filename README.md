@@ -33,16 +33,14 @@ sudo -H pip3 install ansible
 
 Mac  
 ```
-https://brew.sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+https://brew.sh/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)
 
 brew install nmap
 sudo -H pip3 install ansible
 ```
 
-
 ### How to install  
-Copy the host-reporter folder to your machine.  
+`Copy the host-reporter folder to your machine.`  
 
 ### Execution  
 From within the host-reporter folder, issue the following command. Most of the tasks require sudo privileges.  
