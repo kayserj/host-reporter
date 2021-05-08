@@ -1,28 +1,33 @@
 ---
 # Ansible Host Scanner by James Kayser
-# main playbook
 - hosts: localhost
   gather_facts: false
+
+  vars:
+   msg: |
+              Check the readme.md file for instructions on how to install and use this script.
+              Certain tasks require sudo. To run as sudo, execute the following.
+                 ansible-playbook host-reporter.yml --ask-become-pass
+
+              If generating a report, look in your home directory for the html file output
+              If using the list option, make sure you enter your list of ip addresses
+              in the ip-list.txt file included with this playbook
+
   tasks:
     - name: Garbage Collection
       file:
         path: ./scan-output.xml
         state: absent
-    
-    - name: SYNTAX WARNING
-      debug: 
-        msg: "Playbook execution syntax   ansible-playbook host-reporter.yml --ask-become-pass.   Tasks require sudo"
 
-    - name: REPORT WARNING
-      debug: 
-        msg: "Check your home directory for the completed report"
+    - name: "Instructions"
+      debug:
+        msg: "{{ msg.split('\n') }}"
 
-        
 - hosts: localhost
   any_errors_fatal: false
   gather_facts: true
   roles:
-    - role: query
+    - role: scan
 
   vars_prompt:
 

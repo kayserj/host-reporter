@@ -1,0 +1,6 @@
+---
+mtu_switch: "-script path-mtu"
+os_switch: "-O"
+ping_switch: "-sn"
+port_switch: ""
+trace_switch: "--traceroute -sV -p80"

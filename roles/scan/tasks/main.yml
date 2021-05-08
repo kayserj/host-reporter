@@ -2,13 +2,13 @@
 - name: Pre-processing
   include_tasks: pre-processing.yml
 
-- name: Running {{ scan_type }} Scan Against {{ target_hosts }}
+- name: Running {{ scan_type }} scan against {{ target_hosts }}
   command: 'nmap --system-dns {{ switch_option }} {{ toggle_list }} -oX ./scan-output.xml {{ target_hosts }}'
   become: true
   register: scan_complete
 
 - name: Reports Creation
-  command: 'xsltproc ./scan-output.xml -o ~/scan-report.html'
+  command: 'xsltproc ./scan-output.xml -o ~/scan-report_{{ ansible_date_time.date }}-{{ ansible_date_time.time }}.html'
   when: create_report == 'y'
 
 - name: Garbage Collection
