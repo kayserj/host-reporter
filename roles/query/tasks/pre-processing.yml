@@ -1,0 +1,43 @@
+---
+- name: Mac Dependency Checks
+  include_tasks: mac-dep.yml
+  when: (ansible_os_family=='Darwin' and dependency_check=='y')
+
+- name: Linux Dependency Checks
+  include_tasks: linux-dep.yml
+  when: (ansible_os_family=='RedHat' and dependency_check=='y') or (ansible_os_family=='Debian' and dependency_check=='y') or (ansible_os_family=='CentOS' and dependency_check=='y')
+
+- name: List Option Off
+  set_fact: 
+     toggle_list: ''
+  when: target_hosts != 'list'
+
+- name: List Option On
+  set_fact: 
+     toggle_list: "-iL ip-list.txt"
+  when: target_hosts == 'list'
+
+- name: Switch Options MTU
+  set_fact:
+     switch_option: '{{ mtu_switch }}'
+  when: scan_type == 'mtu'
+ 
+- name: Switch Options OS
+  set_fact:
+     switch_option: '{{ os_switch }}'
+  when: scan_type == 'os'
+
+- name: Switch Options PING
+  set_fact:
+     switch_option: '{{ ping_switch }}'
+  when: scan_type == 'ping'
+
+- name: Switch Options MTU
+  set_fact:
+     switch_option: '{{ port_switch }}'
+  when: scan_type == 'port'
+
+- name: Switch Options TRACE
+  set_fact:
+     switch_option: '{{ trace_switch }}'
+  when: scan_type == 'trace'

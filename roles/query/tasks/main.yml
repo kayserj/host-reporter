@@ -1,0 +1,21 @@
+---
+- name: Pre-processing
+  include_tasks: pre-processing.yml
+
+- name: Running {{ scan_type }} Scan Against {{ target_hosts }}
+  command: 'nmap --system-dns {{ switch_option }} {{ toggle_list }} -oX ./scan-output.xml {{ target_hosts }}'
+  become: true
+  register: scan_complete
+
+- name: Reports Creation
+  command: 'xsltproc ./scan-output.xml -o ~/scan-report.html'
+  when: create_report == 'y'
+
+- name: Garbage Collection
+  file:
+    path: ./scan-output.xml
+    state: absent
+
+- name: Show Scan Results
+  debug: 
+    msg: '{{ scan_complete.stdout_lines }}'

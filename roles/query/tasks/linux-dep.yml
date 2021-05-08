@@ -1,0 +1,25 @@
+---
+- name: Verifying Linux Package Dependencies
+  package: 
+    name: 
+      - nmap
+      - xsltproc
+    state: present
+  when: (ansible_os_family=='RedHat') or (ansible_os_family=='Debian') or (ansible_os_family=='CentOS')
+  become: 'yes'
+
+- name: Finding geoplugin.nse
+  find:
+    paths: /
+    patterns: "ip-geolocation-geoplugin.nse"
+    recurse: yes
+  register: find_output
+
+- name: Editing Geolocation File
+  lineinfile:
+    path: '{{ item.path }}'
+    regexp: 'return\sstdnse.format_output\(true,output\)$'
+    line: '  return stdnse.format_output(true,result)'
+    state: present
+  become: yes
+  loop: '{{ find_output.files }}'

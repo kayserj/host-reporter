@@ -1,0 +1,47 @@
+---
+# Ansible Host Scanner by James Kayser
+# main playbook
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Garbage Collection
+      file:
+        path: ./scan-output.xml
+        state: absent
+    
+    - name: SYNTAX WARNING
+      debug: 
+        msg: "Playbook execution syntax   ansible-playbook host-reporter.yml --ask-become-pass.   Tasks require sudo"
+
+    - name: REPORT WARNING
+      debug: 
+        msg: "Check your home directory for the completed report"
+
+        
+- hosts: localhost
+  any_errors_fatal: false
+  gather_facts: true
+  roles:
+    - role: query
+
+  vars_prompt:
+
+  - name: "dependency_check"
+    prompt: "Run Dependency Checks (good idea if first run)?  y|n"
+    private: no
+    default: 'n'
+
+  - name: "scan_type"
+    prompt: "Enter type of scan  ping|port|os|mtu|trace (ping sweep|tcp port scan|os detection|path mtu|traceroute)"
+    private: no
+    default: 'ping'
+
+  - name: "target_hosts"
+    prompt: "Enter subnet in CIDR notation, host IP, or type the word  list  for ip-list.txt input"
+    private: no
+    default: 'list'
+
+  - name: "create_report"
+    prompt: "Create HTML Report?  y|n"
+    private: no
+    default: 'n'

@@ -1,0 +1,19 @@
+---
+- name: Checking or Installing Homebrew Package Dependencies
+  homebrew: 
+    name: 
+      - nmap
+    state: present
+  when: ansible_os_family=='Darwin'
+
+- name: Getting Nmap Version
+  command: ls /usr/local/Cellar/nmap
+  register: nmap_ver
+
+- name: Editing Geolocation File
+  lineinfile:
+    path: '/usr/local/Cellar/nmap/{{ nmap_ver.stdout }}/share/nmap/scripts/ip-geolocation-geoplugin.nse'
+    regexp: 'return\sstdnse.format_output\(true,output\)$'
+    line: '  return stdnse.format_output(true,result)'
+    state: present
+  become: yes
